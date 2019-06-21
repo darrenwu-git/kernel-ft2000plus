@@ -98,7 +98,7 @@ libs-y		:= arch/arm64/lib/ $(libs-y)
 core-$(CONFIG_EFI_STUB) += $(objtree)/drivers/firmware/efi/libstub/lib.a
 
 # Default target when executing plain make
-KBUILD_IMAGE	:= Image.gz
+KBUILD_IMAGE	:= Image.gz uImage
 KBUILD_DTBS	:= dtbs
 
 all:	$(KBUILD_IMAGE) $(KBUILD_DTBS)
@@ -108,7 +108,10 @@ boot := arch/arm64/boot
 Image: vmlinux
 	$(Q)$(MAKE) $(build)=$(boot) $(boot)/$@
 
-Image.%: Image
+Image.%: vmlinux
+	$(Q)$(MAKE) $(build)=$(boot) $(boot)/$@
+
+uImage: Image
 	$(Q)$(MAKE) $(build)=$(boot) $(boot)/$@
 
 zinstall install:
